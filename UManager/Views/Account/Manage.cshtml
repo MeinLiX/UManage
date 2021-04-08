@@ -1,0 +1,68 @@
+﻿@model List<UManager.Models.UserModel>
+@{
+    ViewData["Title"] = "Manage users";
+}
+@using (Html.BeginForm("Manage", "Account", FormMethod.Post))
+{
+    <h2 class="display-5">Manage user</h2>
+
+    <div class="form-group">
+        <input class="btn btn-danger" type="submit" value="Block" asp-route-ToBlock="@true" />
+        <input class="btn btn-success" type="submit" value="Unblock" asp-route-ToBlock="@false" />
+        <input class="btn btn-dark" type="button" value="Uncheck All" OnClick="checkAll(false)" />
+        <input class="btn btn-dark" type="button" value="Сheck All" OnClick="checkAll(true)" />
+    </div>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model[0].Email)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model[0].IsBlocked)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model[0].Selected)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(m => m[i].Email)
+                        @Html.HiddenFor(m => m[i].Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => m[i].IsBlocked)@*?"Blocked":"Active"*@
+                        @Html.HiddenFor(m => m[i].IsBlocked)
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(m => m[i].Selected, new { @checked = "false", @class="SelectCheckBox"})
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        window.onload = function () {
+            var uri = window.location.toString();
+            if (uri.indexOf("?") > 0) {
+                var clean_uri = uri.substring(0, uri.indexOf("?"));
+                window.history.replaceState({}, document.title, clean_uri);
+            }
+        } 
+
+        function checkAll(flag) {
+            checkboxes = document.getElementsByClassName('SelectCheckBox');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox' ) {
+                    checkboxes[i].checked = flag;
+                }
+            }
+        }
+    </script>
+}
+
+

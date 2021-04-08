@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using UManager.ViewModels;
 using UManager.Models;
 using UManager.IdentityFilter;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace UManager.Controllers
 {
@@ -88,6 +90,38 @@ namespace UManager.Controllers
                 }
             }
             return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Manage()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
+            return View(_userManager.Users.ToList());
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Manage(List<UserModel> items, [Bind("ToBlock")] bool ToBlock = false)
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
+
+            foreach (var user in items)
+            {
+                if (user.Selected)
+                {
+                    UserModel foundedUser = await _userManager.FindByEmailAsync(user.Email);
+                    if (foundedUser is not null)
+                    {
+                        foundedUser.IsBlocked = ToBlock;
+                        foundedUser.Selected = false;
+                        
+                        await _userManager.UpdateAsync(foundedUser);
+                    }
+                }
+            }
+            return View(_userManager.Users.ToList());
         }
     }
 }
