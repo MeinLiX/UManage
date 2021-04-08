@@ -1,0 +1,23 @@
+﻿@model UManager.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Sign in";
+}
+
+<h2 class="display-5">Sign in</h2>
+
+<form method="post" asp-controller="Account" asp-action="Login">
+    <div class="alert-warning" asp-validation-summary="ModelOnly"></div>
+    <div class="form-group">
+        <label class="form-label" asp-for="Email"></label><br />
+        <input class="form-control" asp-for="Email" type="email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="form-label" asp-for="Password"></label><br />
+        <input class="form-control" asp-for="Password" type="password" />
+    </div>
+    <div class="form-group">
+        <input class="btn btn-primary" type="submit" value="Login" />
+        <a class="btn btn-link" asp-action="Register"> Register</a>
+    </div>
+</form>

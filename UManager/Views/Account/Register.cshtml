@@ -1,0 +1,29 @@
+﻿@model UManager.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Sign up";
+}
+
+<h2 class="display-5">Sign up</h2>
+
+<form method="post" asp-controller="Account" asp-action="Register">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="form-group">
+        <label class="form-label" asp-for="Email"></label><br />
+        <input class="form-control" asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div class="form-group">
+        <label class="form-label" asp-for="Password"></label><br />
+        <input class="form-control" asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div class="form-group">
+        <label class="form-label" asp-for="PasswordConfirm"></label><br />
+        <input class="form-control" asp-for="PasswordConfirm" />
+        <span asp-validation-for="PasswordConfirm"></span>
+    </div>
+    <div class="form-group">
+        <input class="btn btn-primary" type="submit" value="Register" />
+        <a class="btn btn-link" asp-action="Login"> Login</a>
+    </div>
+</form>
