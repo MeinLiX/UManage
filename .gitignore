@@ -4,6 +4,7 @@
 # Build results
 [Bb]in/
 [Oo]bj/
+*.csproj.user
 
 # Tools pulled down during build
 .tools/
