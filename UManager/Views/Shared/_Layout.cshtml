@@ -29,6 +29,7 @@
                             <li class="dropdown nav-item">
                                 <button class="dropbtn" method="post" disable>@User.Identity.Name</button>
                                 <div class="dropdown-content">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Manage">Manage</a>
                                     <form method="post">
                                         <input asp-area="" asp-controller="Account" asp-action="Logout" type="submit" value="Logout" class="float-right" />
                                     </form>
