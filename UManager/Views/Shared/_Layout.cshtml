@@ -24,6 +24,27 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="dropdown nav-item">
+                                <button class="dropbtn" method="post" disable>@User.Identity.Name</button>
+                                <div class="dropdown-content">
+                                    <form method="post">
+                                        <input asp-area="" asp-controller="Account" asp-action="Logout" type="submit" value="Logout" class="float-right" />
+                                    </form>
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="dropdown nav-item">
+                                <button class="dropbtn">Authorization</button>
+                                <div class="dropdown-content">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                                </div>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
