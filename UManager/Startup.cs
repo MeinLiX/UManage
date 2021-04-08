@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using UManager.IdentityFilter;
+using UManager.Models;
+
 
 namespace UManager
 {
@@ -22,6 +23,21 @@ namespace UManager
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionIdentity = Configuration.GetConnectionString("IdentityConnection");
+            services.AddDbContext<IdentityCTX>(options => options.UseSqlServer(connectionIdentity));
+
+            services.AddIdentity<UserModel, IdentityRole>(opts =>
+            {
+                opts.Password.RequiredLength = 1;
+                opts.Password.RequireLowercase = false;
+                opts.Password.RequireUppercase = false;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequireDigit = false;
+            }).AddEntityFrameworkStores<IdentityCTX>()
+                .AddDefaultTokenProviders()
+                .AddSignInManager<CustomSignInManager<UserModel>>()
+                .AddUserManager<CustomUserManager<UserModel>>();
+
             services.AddControllersWithViews();
         }
 
@@ -40,6 +56,7 @@ namespace UManager
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
