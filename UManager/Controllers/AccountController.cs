@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
 using UManager.ViewModels;
 using UManager.Models;
 using UManager.IdentityFilter;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 namespace UManager.Controllers
 {
@@ -82,7 +82,11 @@ namespace UManager.Controllers
 
                 if (result.Succeeded)
                 {
-                        return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home");
+                }
+                else if (result.IsLockedOut)
+                {
+                    ModelState.AddModelError("", "Your account is banned.");
                 }
                 else
                 {
@@ -111,13 +115,15 @@ namespace UManager.Controllers
             {
                 if (user.Selected)
                 {
-                    UserModel foundedUser = await _userManager.FindByEmailAsync(user.Email);
+                    var foundedUser = await _userManager.FindByEmailAsync(user.Email);
                     if (foundedUser is not null)
                     {
                         foundedUser.IsBlocked = ToBlock;
                         foundedUser.Selected = false;
-                        
-                        await _userManager.UpdateAsync(foundedUser);
+                        await _userManager.SetLockoutEnabledAsync(foundedUser, ToBlock);
+                        await _userManager.SetLockoutEndDateAsync(foundedUser, ToBlock ? DateTimeOffset.Now.AddDays(5000) : DateTimeOffset.Now);
+                        if(ToBlock) 
+                            await _userManager.UpdateSecurityStampAsync(foundedUser);
                     }
                 }
             }
