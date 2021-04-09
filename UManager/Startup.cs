@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using UManager.IdentityFilter;
 using UManager.Models;
 
@@ -37,6 +38,11 @@ namespace UManager
                 .AddDefaultTokenProviders()
                 .AddSignInManager<CustomSignInManager<UserModel>>()
                 .AddUserManager<CustomUserManager<UserModel>>();
+
+            services.Configure<SecurityStampValidatorOptions>(options =>
+            {
+                options.ValidationInterval = TimeSpan.Zero;
+            });
 
             services.AddControllersWithViews();
         }
