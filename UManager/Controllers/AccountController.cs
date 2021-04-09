@@ -1,20 +1,21 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using UManager.ViewModels;
-using UManager.Models;
-using UManager.IdentityFilter;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Linq;
 using System.Collections.Generic;
-using System;
+using UManager.ViewModels;
+using UManager.Models;
+
 
 namespace UManager.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly CustomUserManager<UserModel> _userManager;
-        private readonly CustomSignInManager<UserModel> _signInManager;
+        private readonly UserManager<UserModel> _userManager;
+        private readonly SignInManager<UserModel> _signInManager;
 
-        public AccountController(CustomUserManager<UserModel> userManager, CustomSignInManager<UserModel> signInManager)
+        public AccountController(UserManager<UserModel> userManager, SignInManager<UserModel> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

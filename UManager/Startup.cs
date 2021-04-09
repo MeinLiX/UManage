@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using UManager.IdentityFilter;
 using UManager.Models;
 
 
@@ -35,9 +34,7 @@ namespace UManager
                 opts.Password.RequireNonAlphanumeric = false;
                 opts.Password.RequireDigit = false;
             }).AddEntityFrameworkStores<IdentityCTX>()
-                .AddDefaultTokenProviders()
-                .AddSignInManager<CustomSignInManager<UserModel>>()
-                .AddUserManager<CustomUserManager<UserModel>>();
+                .AddDefaultTokenProviders();
 
             services.Configure<SecurityStampValidatorOptions>(options =>
             {
